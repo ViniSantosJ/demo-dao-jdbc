@@ -98,7 +98,7 @@ public class SellerDaoJDBC implements SellerDao {
                 System.out.println("ID not found!");
             }
             else {
-                System.out.println("Delete completed!");
+                System.out.println("Delete complete!");
             }
 
         } catch (SQLException e) {

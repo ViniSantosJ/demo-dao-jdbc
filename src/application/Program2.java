@@ -12,10 +12,21 @@ public class Program2 {
         Scanner sc = new Scanner(System.in);
         DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
 
+        System.out.println("Digite o nome de um novo departamento: ");
+        String n = sc.nextLine();
+
         System.out.println("=== TESTE 1: department insert ===");
-        Department newDepartment = new Department(null, "T.I.");
+        Department newDepartment = new Department(null, n);
         departmentDao.insert(newDepartment);
         System.out.println("Inserted! New id = " + newDepartment.getId());
+
+        System.out.println("\nDigite um id para deletar: ");
+        int id = sc.nextInt();
+        System.out.println();
+
+        System.out.println("=== TESTE 2: department delete ===");
+        departmentDao.deleteById(id);
+
 
         sc.close();
     }
