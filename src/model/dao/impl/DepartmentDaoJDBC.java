@@ -13,7 +13,9 @@ import java.util.List;
 public class DepartmentDaoJDBC implements DepartmentDao {
 
     private Connection conn;
-    public DepartmentDaoJDBC(){}
+
+    public DepartmentDaoJDBC() {
+    }
 
     public DepartmentDaoJDBC(Connection conn) {
         this.conn = conn;
@@ -27,14 +29,14 @@ public class DepartmentDaoJDBC implements DepartmentDao {
         try {
             st = conn.prepareStatement(
                     "  INSERT INTO DEPARTMENT (NAME)  " +
-                    "  VALUES (?) ",
+                            "  VALUES (?) ",
                     Statement.RETURN_GENERATED_KEYS);
 
             st.setString(1, obj.getName());
 
             int rowsAffected = st.executeUpdate();
 
-            if (rowsAffected > 0){
+            if (rowsAffected > 0) {
                 ResultSet rs = st.getGeneratedKeys();
                 if (rs.next()) {
                     int id = rs.getInt(1);
@@ -42,11 +44,11 @@ public class DepartmentDaoJDBC implements DepartmentDao {
                 }
                 DB.closeResultSet(rs);
             } else {
-                throw  new DbException("Unexpected error! No rows affected!");
+                throw new DbException("Unexpected error! No rows affected!");
             }
 
         } catch (SQLException e) {
-           throw new DbException(e.getMessage());
+            throw new DbException(e.getMessage());
         } finally {
             DB.closeStatement(st);
         }
@@ -54,7 +56,31 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
     @Override
     public void update(Department obj) {
+        PreparedStatement st = null;
 
+        try {
+            st = conn.prepareStatement(
+                    "  UPDATE DEPARTMENT   " +
+                            "  SET NAME = ?  " +
+                            "  WHERE ID = ?  "
+            );
+
+            st.setString(1, obj.getName());
+            st.setInt(2, obj.getId());
+
+            int rowsAffected = st.executeUpdate();
+
+            if (rowsAffected == 0) {
+                System.out.println("Nenhum departamento encontrado!");
+            } else {
+                System.out.println("Update realizado!");
+            }
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(st);
+        }
     }
 
     @Override
